@@ -1,391 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Level-Up Quest 🎮</title>
-    <meta name="description" content="Gamified learning tracker for courses, XP, and career development">
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-                sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Level-Up Quest 🎮</title>
+  <meta name="description" content="Gamified learning tracker for courses, XP, and career development">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
 </head>
+
 <body>
-    <div id="root"></div>
-    
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
-    <script type="text/babel">
-        const { Trophy, Flame, Star, Target, Award, Zap, Brain, Rocket, UserPlus, LogOut, Users } = lucide;
+  <div id="root"></div>
 
-        const ADHDLearningTracker = () => {
-          const [currentUser, setCurrentUser] = React.useState(null);
-          const [showLogin, setShowLogin] = React.useState(true);
-          const [username, setUsername] = React.useState('');
-          const [leaderboard, setLeaderboard] = React.useState([]);
+  <script src="https://unpkg.com/lucide-react@latest/dist/umd/lucide-react.min.js"></script>
 
-          const defaultCourses = [
-            {
-              id: 1,
-              name: "MLOps Specialization",
-              platform: "Coursera",
-              weeks: 8,
-              hoursPerWeek: 5,
-              priority: "CRITICAL",
-              xpValue: 500,
-              modules: [
-                { name: "Introduction to ML in Production", completed: false, xp: 100 },
-                { name: "ML Data Lifecycle", completed: false, xp: 100 },
-                { name: "ML Modeling Pipelines", completed: false, xp: 100 },
-                { name: "Deploying ML Models", completed: false, xp: 100 },
-                { name: "ML Operations", completed: false, xp: 100 }
-              ],
-              deadline: "2026-03-21",
-              started: false,
-              completed: false
-            },
-            {
-              id: 2,
-              name: "AWS Cloud Practitioner",
-              platform: "Coursera/AWS",
-              weeks: 4,
-              hoursPerWeek: 6,
-              priority: "CRITICAL",
-              xpValue: 400,
-              modules: [
-                { name: "Cloud Concepts", completed: false, xp: 100 },
-                { name: "AWS Services", completed: false, xp: 100 },
-                { name: "Security & Compliance", completed: false, xp: 100 },
-                { name: "Pricing & Support", completed: false, xp: 100 }
-              ],
-              deadline: "2026-02-21",
-              started: false,
-              completed: false
-            },
-            {
-              id: 3,
-              name: "Deep Learning Specialization",
-              platform: "Coursera",
-              weeks: 12,
-              hoursPerWeek: 5,
-              priority: "HIGH",
-              xpValue: 600,
-              modules: [
-                { name: "Neural Networks Basics", completed: false, xp: 100 },
-                { name: "Improving Deep NNs", completed: false, xp: 100 },
-                { name: "ML Projects", completed: false, xp: 100 },
-                { name: "CNNs", completed: false, xp: 100 },
-                { name: "Sequence Models", completed: false, xp: 150 },
-                { name: "Transformers", completed: false, xp: 150 }
-              ],
-              deadline: "2026-04-21",
-              started: false,
-              completed: false
-            },
-            {
-              id: 4,
-              name: "NLP Specialization",
-              platform: "Coursera",
-              weeks: 10,
-              hoursPerWeek: 5,
-              priority: "HIGH",
-              xpValue: 550,
-              modules: [
-                { name: "NLP with Classification", completed: false, xp: 110 },
-                { name: "NLP with Probabilistic Models", completed: false, xp: 110 },
-                { name: "NLP with Sequence Models", completed: false, xp: 110 },
-                { name: "NLP with Attention Models", completed: false, xp: 110 },
-                { name: "Advanced BERT Applications", completed: false, xp: 110 }
-              ],
-              deadline: "2026-05-01",
-              started: false,
-              completed: false
-            }
-          ];
+  <script type="text/babel">
+    const { Trophy, Flame, Star, Target, Award, Zap, Brain, Rocket, UserPlus, LogOut, Users } = lucideReact;
 
-          const defaultBonusChallenges = [
-            { id: 1, name: "GitHub README Polish", xp: 150, completed: false, type: "PROJECT" },
-            { id: 2, name: "Write Technical Blog Post #1", xp: 200, completed: false, type: "WRITING" },
-            { id: 3, name: "Kaggle Competition Entry", xp: 300, completed: false, type: "COMPETITION" },
-            { id: 4, name: "LinkedIn Profile Update", xp: 100, completed: false, type: "CAREER" },
-            { id: 5, name: "Research Paper Documentation", xp: 250, completed: false, type: "PROJECT" }
-          ];
+    const ADHDLearningTracker = () => {
+      const [currentUser, setCurrentUser] = React.useState(null);
+      const [showLogin, setShowLogin] = React.useState(true);
+      const [username, setUsername] = React.useState('');
+      const [leaderboard, setLeaderboard] = React.useState([]);
 
-          const defaultDailyTasks = [
-            { id: 1, name: "Study Session (1hr+)", completed: false, xp: 50 },
-            { id: 2, name: "Code Practice (30min)", completed: false, xp: 30 },
-            { id: 3, name: "Review Notes", completed: false, xp: 20 }
-          ];
+      const defaultCourses = [
+        {
+          id: 1,
+          name: "MLOps Specialization",
+          platform: "Coursera",
+          weeks: 8,
+          hoursPerWeek: 5,
+          priority: "CRITICAL",
+          xpValue: 500,
+          modules: [
+            { name: "Introduction to ML in Production", completed: false, xp: 100 },
+            { name: "ML Data Lifecycle", completed: false, xp: 100 },
+            { name: "ML Modeling Pipelines", completed: false, xp: 100 },
+            { name: "Deploying ML Models", completed: false, xp: 100 },
+            { name: "ML Operations", completed: false, xp: 100 }
+          ],
+          deadline: "2026-03-21",
+          started: false,
+          completed: false
+        },
+        {
+          id: 2,
+          name: "AWS Cloud Practitioner",
+          platform: "Coursera/AWS",
+          weeks: 4,
+          hoursPerWeek: 6,
+          priority: "CRITICAL",
+          xpValue: 400,
+          modules: [
+            { name: "Cloud Concepts", completed: false, xp: 100 },
+            { name: "AWS Services", completed: false, xp: 100 },
+            { name: "Security & Compliance", completed: false, xp: 100 },
+            { name: "Pricing & Support", completed: false, xp: 100 }
+          ],
+          deadline: "2026-02-21",
+          started: false,
+          completed: false
+        },
+        {
+          id: 3,
+          name: "Deep Learning Specialization",
+          platform: "Coursera",
+          weeks: 12,
+          hoursPerWeek: 5,
+          priority: "HIGH",
+          xpValue: 600,
+          modules: [
+            { name: "Neural Networks Basics", completed: false, xp: 100 },
+            { name: "Improving Deep NNs", completed: false, xp: 100 },
+            { name: "ML Projects", completed: false, xp: 100 },
+            { name: "CNNs", completed: false, xp: 100 },
+            { name: "Sequence Models", completed: false, xp: 150 },
+            { name: "Transformers", completed: false, xp: 150 }
+          ],
+          deadline: "2026-04-21",
+          started: false,
+          completed: false
+        },
+        {
+          id: 4,
+          name: "NLP Specialization",
+          platform: "Coursera",
+          weeks: 10,
+          hoursPerWeek: 5,
+          priority: "HIGH",
+          xpValue: 550,
+          modules: [
+            { name: "NLP with Classification", completed: false, xp: 110 },
+            { name: "NLP with Probabilistic Models", completed: false, xp: 110 },
+            { name: "NLP with Sequence Models", completed: false, xp: 110 },
+            { name: "NLP with Attention Models", completed: false, xp: 110 },
+            { name: "Advanced BERT Applications", completed: false, xp: 110 }
+          ],
+          deadline: "2026-05-01",
+          started: false,
+          completed: false
+        }
+      ];
 
-          const [courses, setCourses] = React.useState(defaultCourses);
-          const [bonusChallenges, setBonusChallenges] = React.useState(defaultBonusChallenges);
-          const [dailyTasks, setDailyTasks] = React.useState(defaultDailyTasks);
-          const [stats, setStats] = React.useState({
-            totalXP: 0,
-            level: 1,
-            streak: 0,
-            lastActive: null,
-            achievements: []
-          });
+      const defaultBonusChallenges = [
+        { id: 1, name: "GitHub README Polish", xp: 150, completed: false, type: "PROJECT" },
+        { id: 2, name: "Write Technical Blog Post #1", xp: 200, completed: false, type: "WRITING" },
+        { id: 3, name: "Kaggle Competition Entry", xp: 300, completed: false, type: "COMPETITION" },
+        { id: 4, name: "LinkedIn Profile Update", xp: 100, completed: false, type: "CAREER" },
+        { id: 5, name: "Research Paper Documentation", xp: 250, completed: false, type: "PROJECT" }
+      ];
 
-          React.useEffect(() => {
-            const loadUserData = async () => {
-              if (!currentUser) return;
+      const defaultDailyTasks = [
+        { id: 1, name: "Study Session (1hr+)", completed: false, xp: 50 },
+        { id: 2, name: "Code Practice (30min)", completed: false, xp: 30 },
+        { id: 3, name: "Review Notes", completed: false, xp: 20 }
+      ];
 
-              try {
-                const coursesResult = await window.storage.get(`${currentUser}-courses`);
-                if (coursesResult) setCourses(JSON.parse(coursesResult.value));
+      const [courses, setCourses] = React.useState(defaultCourses);
+      const [bonusChallenges, setBonusChallenges] = React.useState(defaultBonusChallenges);
+      const [dailyTasks, setDailyTasks] = React.useState(defaultDailyTasks);
+      const [stats, setStats] = React.useState({
+        totalXP: 0,
+        level: 1,
+        streak: 0,
+        lastActive: null,
+        achievements: []
+      });
 
-                const bonusResult = await window.storage.get(`${currentUser}-bonus`);
-                if (bonusResult) setBonusChallenges(JSON.parse(bonusResult.value));
+      React.useEffect(() => {
+        const loadUserData = async () => {
+          if (!currentUser) return;
 
-                const dailyResult = await window.storage.get(`${currentUser}-daily`);
-                if (dailyResult) setDailyTasks(JSON.parse(dailyResult.value));
+          try {
+            const coursesResult = window.localStorage.getItem(`${currentUser}-courses`);
+            if (coursesResult) setCourses(JSON.parse(coursesResult));
 
-                const statsResult = await window.storage.get(`${currentUser}-stats`);
-                if (statsResult) setStats(JSON.parse(statsResult.value));
-              } catch (error) {
-                console.log('First time user, using defaults');
-              }
-            };
+            const bonusResult = window.localStorage.getItem(`${currentUser}-bonus`);
+            if (bonusResult) setBonusChallenges(JSON.parse(bonusResult));
 
-            loadUserData();
-            loadLeaderboard();
-          }, [currentUser]);
+            const dailyResult = window.localStorage.getItem(`${currentUser}-daily`);
+            if (dailyResult) setDailyTasks(JSON.parse(dailyResult));
 
-          React.useEffect(() => {
-            const saveUserData = async () => {
-              if (!currentUser) return;
-
-              try {
-                await window.storage.set(`${currentUser}-courses`, JSON.stringify(courses));
-                await window.storage.set(`${currentUser}-bonus`, JSON.stringify(bonusChallenges));
-                await window.storage.set(`${currentUser}-daily`, JSON.stringify(dailyTasks));
-                await window.storage.set(`${currentUser}-stats`, JSON.stringify(stats));
-                
-                await window.storage.set(`leaderboard-${currentUser}`, JSON.stringify({
-                  username: currentUser,
-                  totalXP: stats.totalXP,
-                  level: stats.level,
-                  streak: stats.streak
-                }), true);
-                
-                loadLeaderboard();
-              } catch (error) {
-                console.error('Error saving data:', error);
-              }
-            };
-
-            if (currentUser) saveUserData();
-          }, [courses, bonusChallenges, dailyTasks, stats, currentUser]);
-
-          const loadLeaderboard = async () => {
-            try {
-              const result = await window.storage.list('leaderboard-', true);
-              if (result && result.keys) {
-                const leaderboardData = [];
-                for (const key of result.keys) {
-                  try {
-                    const userData = await window.storage.get(key, true);
-                    if (userData) leaderboardData.push(JSON.parse(userData.value));
-                  } catch (error) {
-                    console.error('Error loading user data:', error);
-                  }
-                }
-                leaderboardData.sort((a, b) => b.totalXP - a.totalXP);
-                setLeaderboard(leaderboardData.slice(0, 10));
-              }
-            } catch (error) {
-              console.error('Error loading leaderboard:', error);
-            }
-          };
-
-          const handleLogin = () => {
-            if (username.trim()) {
-              setCurrentUser(username.trim());
-              setShowLogin(false);
-            }
-          };
-
-          const handleLogout = () => {
-            setCurrentUser(null);
-            setShowLogin(true);
-            setUsername('');
-            setCourses(defaultCourses);
-            setBonusChallenges(defaultBonusChallenges);
-            setDailyTasks(defaultDailyTasks);
-            setStats({
-              totalXP: 0,
-              level: 1,
-              streak: 0,
-              lastActive: null,
-              achievements: []
-            });
-          };
-
-          const calculateLevel = (xp) => Math.floor(xp / 500) + 1;
-          const calculateXPToNextLevel = (xp) => (calculateLevel(xp) * 500) - xp;
-
-          const toggleModuleComplete = (courseId, moduleIndex) => {
-            setCourses(prevCourses => {
-              const updatedCourses = prevCourses.map(course => {
-                if (course.id === courseId) {
-                  const updatedModules = [...course.modules];
-                  const module = updatedModules[moduleIndex];
-                  module.completed = !module.completed;
-                  
-                  const xpChange = module.completed ? module.xp : -module.xp;
-                  
-                  setStats(prev => ({
-                    ...prev,
-                    totalXP: Math.max(0, prev.totalXP + xpChange),
-                    level: calculateLevel(Math.max(0, prev.totalXP + xpChange))
-                  }));
-                  
-                  const allComplete = updatedModules.every(m => m.completed);
-                  return { ...course, modules: updatedModules, completed: allComplete, started: true };
-                }
-                return course;
-              });
-              return updatedCourses;
-            });
-          };
-
-          const toggleBonusChallenge = (challengeId) => {
-            setBonusChallenges(prev => prev.map(challenge => {
-              if (challenge.id === challengeId) {
-                const newCompleted = !challenge.completed;
-                const xpChange = newCompleted ? challenge.xp : -challenge.xp;
-                
-                setStats(prevStats => ({
-                  ...prevStats,
-                  totalXP: Math.max(0, prevStats.totalXP + xpChange),
-                  level: calculateLevel(Math.max(0, prevStats.totalXP + xpChange))
-                }));
-                
-                return { ...challenge, completed: newCompleted };
-              }
-              return challenge;
-            }));
-          };
-
-          const toggleDailyTask = (taskId) => {
-            setDailyTasks(prev => prev.map(task => {
-              if (task.id === taskId) {
-                const newCompleted = !task.completed;
-                const xpChange = newCompleted ? task.xp : -task.xp;
-                
-                setStats(prevStats => ({
-                  ...prevStats,
-                  totalXP: Math.max(0, prevStats.totalXP + xpChange),
-                  level: calculateLevel(Math.max(0, prevStats.totalXP + xpChange)),
-                  streak: newCompleted ? prevStats.streak + 1 : Math.max(0, prevStats.streak - 1)
-                }));
-                
-                return { ...task, completed: newCompleted };
-              }
-              return task;
-            }));
-          };
-
-          const getPriorityColor = (priority) => {
-            switch(priority) {
-              case "CRITICAL": return "bg-red-100 text-red-800 border-red-300";
-              case "HIGH": return "bg-orange-100 text-orange-800 border-orange-300";
-              case "MEDIUM": return "bg-yellow-100 text-yellow-800 border-yellow-300";
-              default: return "bg-gray-100 text-gray-800 border-gray-300";
-            }
-          };
-
-          const getProgressColor = (percentage) => {
-            if (percentage >= 75) return "bg-green-500";
-            if (percentage >= 50) return "bg-blue-500";
-            if (percentage >= 25) return "bg-yellow-500";
-            return "bg-red-500";
-          };
-
-          if (showLogin) {
-            return React.createElement('div', {
-              className: "min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 flex items-center justify-center p-6"
-            }, React.createElement('div', {
-              className: "bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border-4 border-purple-200"
-            }, 
-              React.createElement('div', { className: "text-center mb-8" },
-                React.createElement('div', { className: "text-6xl mb-4" }, '🎮'),
-                React.createElement('h1', { 
-                  className: "text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2" 
-                }, 'Career Level-Up Quest'),
-                React.createElement('p', { className: "text-gray-600" }, 'Join your friends and level up together!')
-              ),
-              React.createElement('div', { className: "space-y-4" },
-                React.createElement('div', {},
-                  React.createElement('label', { className: "block text-sm font-semibold mb-2 text-gray-700" }, 
-                    'Choose Your Username'
-                  ),
-                  React.createElement('input', {
-                    type: "text",
-                    value: username,
-                    onChange: (e) => setUsername(e.target.value),
-                    onKeyPress: (e) => e.key === 'Enter' && handleLogin(),
-                    placeholder: "Enter username...",
-                    className: "w-full px-4 py-3 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg"
-                  })
-                ),
-                React.createElement('button', {
-                  onClick: handleLogin,
-                  disabled: !username.trim(),
-                  className: "w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold text-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                },
-                  React.createElement(UserPlus, { className: "w-5 h-5" }),
-                  'Start Your Quest'
-                )
-              )
-            ));
+            const statsResult = window.localStorage.getItem(`${currentUser}-stats`);
+            if (statsResult) setStats(JSON.parse(statsResult));
+          } catch (error) {
+            console.log('First time user, using defaults');
           }
-
-          return React.createElement('div', { 
-            className: "min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 p-6" 
-          },
-            React.createElement('div', { className: "max-w-7xl mx-auto" },
-              React.createElement('div', { className: "bg-white rounded-2xl shadow-xl p-6 mb-6 border-4 border-purple-200" },
-                React.createElement('div', { className: "flex items-center justify-between mb-4" },
-                  React.createElement('h1', { 
-                    className: "text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent" 
-                  }, '🎮 Career Level-Up Quest - ' + currentUser),
-                  React.createElement('button', {
-                    onClick: handleLogout,
-                    className: "flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full"
-                  },
-                    React.createElement(LogOut, { className: "w-4 h-4" }),
-                    'Logout'
-                  )
-                ),
-                React.createElement('div', { className: "text-2xl font-bold text-center py-8" },
-                  `Level ${stats.level} • ${stats.totalXP} XP • ${stats.streak} Day Streak 🔥`
-                )
-              ),
-              React.createElement('div', { className: "bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl p-6 text-center" },
-                React.createElement('h3', { className: "text-2xl font-bold mb-2" }, '🚀 Track your progress, earn XP, and level up!'),
-                React.createElement('p', { className: "text-lg opacity-90" }, 
-                  'Click modules to complete them and gain XP. Compete with friends on the leaderboard! 💪'
-                )
-              )
-            )
-          );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(ADHDLearningTracker));
-    </script>
+        loadUserData();
+        loadLeaderboard();
+      }, [currentUser]);
+
+      React.useEffect(() => {
+        const saveUserData = async () => {
+          if (!currentUser) return;
+
+          try {
+            window.localStorage.setItem(`${currentUser}-courses`, JSON.stringify(courses));
+            window.localStorage.setItem(`${currentUser}-bonus`, JSON.stringify(bonusChallenges));
+            window.localStorage.setItem(`${currentUser}-daily`, JSON.stringify(dailyTasks));
+            window.localStorage.setItem(`${currentUser}-stats`, JSON.stringify(stats));
+
+            window.localStorage.setItem(`leaderboard-${currentUser}`, JSON.stringify({
+              username: currentUser,
+              totalXP: stats.totalXP,
+              level: stats.level,
+              streak: stats.streak
+            }));
+
+            loadLeaderboard();
+          } catch (error) {
+            console.error('Error saving data:', error);
+          }
+        };
+
+        if (currentUser) saveUserData();
+      }, [courses, bonusChallenges, dailyTasks, stats, currentUser]);
+
+      const loadLeaderboard = async () => {
+        try {
+          const keys = Object.keys(window.localStorage).filter(key => key.startsWith('leaderboard-'));
+          if (keys.length > 0) {
+            const leaderboardData = [];
+            for (const key of keys) {
+              try {
+                const userData = window.localStorage.getItem(key);
+                if (userData) leaderboardData.push(JSON.parse(userData));
+              } catch (error) {
+                console.error('Error loading user data:', error);
+              }
+            }
+            leaderboardData.sort((a, b) => b.totalXP - a.totalXP);
+            setLeaderboard(leaderboardData.slice(0, 10));
+          }
+        } catch (error) {
+          console.error('Error loading leaderboard:', error);
+        }
+      };
+
+      const handleLogin = () => {
+        if (username.trim()) {
+          setCurrentUser(username.trim());
+          setShowLogin(false);
+        }
+      };
+
+      const handleLogout = () => {
+        setCurrentUser(null);
+        setShowLogin(true);
+        setUsername('');
+        setCourses(defaultCourses);
+        setBonusChallenges(defaultBonusChallenges);
+        setDailyTasks(defaultDailyTasks);
+        setStats({
+          totalXP: 0,
+          level: 1,
+          streak: 0,
+          lastActive: null,
+          achievements: []
+        });
+      };
+
+      const calculateLevel = (xp) => Math.floor(xp / 500) + 1;
+      const calculateXPToNextLevel = (xp) => (calculateLevel(xp) * 500) - xp;
+
+      const toggleModuleComplete = (courseId, moduleIndex) => {
+        setCourses(prevCourses => {
+          const updatedCourses = prevCourses.map(course => {
+            if (course.id === courseId) {
+              const updatedModules = [...course.modules];
+              const module = updatedModules[moduleIndex];
+              module.completed = !module.completed;
+
+              const xpChange = module.completed ? module.xp : -module.xp;
+
+              setStats(prev => ({
+                ...prev,
+                totalXP: Math.max(0, prev.totalXP + xpChange),
+                level: calculateLevel(Math.max(0, prev.totalXP + xpChange))
+              }));
+
+              const allComplete = updatedModules.every(m => m.completed);
+              return { ...course, modules: updatedModules, completed: allComplete, started: true };
+            }
+            return course;
+          });
+          return updatedCourses;
+        });
+      };
+
+      const toggleBonusChallenge = (challengeId) => {
+        setBonusChallenges(prev => prev.map(challenge => {
+          if (challenge.id === challengeId) {
+            const newCompleted = !challenge.completed;
+            const xpChange = newCompleted ? challenge.xp : -challenge.xp;
+
+            setStats(prevStats => ({
+              ...prevStats,
+              totalXP: Math.max(0, prevStats.totalXP + xpChange),
+              level: calculateLevel(Math.max(0, prevStats.totalXP + xpChange))
+            }));
+
+            return { ...challenge, completed: newCompleted };
+          }
+          return challenge;
+        }));
+      };
+
+      const toggleDailyTask = (taskId) => {
+        setDailyTasks(prev => prev.map(task => {
+          if (task.id === taskId) {
+            const newCompleted = !task.completed;
+            const xpChange = newCompleted ? task.xp : -task.xp;
+
+            setStats(prevStats => ({
+              ...prevStats,
+              totalXP: Math.max(0, prevStats.totalXP + xpChange),
+              level: calculateLevel(Math.max(0, prevStats.totalXP + xpChange)),
+              streak: newCompleted ? prevStats.streak + 1 : Math.max(0, prevStats.streak - 1)
+            }));
+
+            return { ...task, completed: newCompleted };
+          }
+          return task;
+        }));
+      };
+
+      const getPriorityColor = (priority) => {
+        switch (priority) {
+          case "CRITICAL": return "bg-red-100 text-red-800 border-red-300";
+          case "HIGH": return "bg-orange-100 text-orange-800 border-orange-300";
+          case "MEDIUM": return "bg-yellow-100 text-yellow-800 border-yellow-300";
+          default: return "bg-gray-100 text-gray-800 border-gray-300";
+        }
+      };
+
+      const getProgressColor = (percentage) => {
+        if (percentage >= 75) return "bg-green-500";
+        if (percentage >= 50) return "bg-blue-500";
+        if (percentage >= 25) return "bg-yellow-500";
+        return "bg-red-500";
+      };
+
+      if (showLogin) {
+        return React.createElement('div', {
+          className: "min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 flex items-center justify-center p-6"
+        }, React.createElement('div', {
+          className: "bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border-4 border-purple-200"
+        },
+          React.createElement('div', { className: "text-center mb-8" },
+            React.createElement('div', { className: "text-6xl mb-4" }, '🎮'),
+            React.createElement('h1', {
+              className: "text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2"
+            }, 'Career Level-Up Quest'),
+            React.createElement('p', { className: "text-gray-600" }, 'Join your friends and level up together!')
+          ),
+          React.createElement('div', { className: "space-y-4" },
+            React.createElement('div', {},
+              React.createElement('label', { className: "block text-sm font-semibold mb-2 text-gray-700" },
+                'Choose Your Username'
+              ),
+              React.createElement('input', {
+                type: "text",
+                value: username,
+                onChange: (e) => setUsername(e.target.value),
+                onKeyPress: (e) => e.key === 'Enter' && handleLogin(),
+                placeholder: "Enter username...",
+                className: "w-full px-4 py-3 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg"
+              })
+            ),
+            React.createElement('button', {
+              onClick: handleLogin,
+              disabled: !username.trim(),
+              className: "w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold text-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            },
+              React.createElement(UserPlus, { className: "w-5 h-5" }),
+              'Start Your Quest'
+            )
+          )
+        ));
+      }
+
+      return React.createElement('div', {
+        className: "min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 p-6"
+      },
+        React.createElement('div', { className: "max-w-7xl mx-auto" },
+          React.createElement('div', { className: "bg-white rounded-2xl shadow-xl p-6 mb-6 border-4 border-purple-200" },
+            React.createElement('div', { className: "flex items-center justify-between mb-4" },
+              React.createElement('h1', {
+                className: "text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+              }, '🎮 Career Level-Up Quest - ' + currentUser),
+              React.createElement('button', {
+                onClick: handleLogout,
+                className: "flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full"
+              },
+                React.createElement(LogOut, { className: "w-4 h-4" }),
+                'Logout'
+              )
+            ),
+            React.createElement('div', { className: "text-2xl font-bold text-center py-8" },
+              `Level ${stats.level} • ${stats.totalXP} XP • ${stats.streak} Day Streak 🔥`
+            )
+          ),
+          React.createElement('div', { className: "bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl p-6 text-center" },
+            React.createElement('h3', { className: "text-2xl font-bold mb-2" }, '🚀 Track your progress, earn XP, and level up!'),
+            React.createElement('p', { className: "text-lg opacity-90" },
+              'Click modules to complete them and gain XP. Compete with friends on the leaderboard! 💪'
+            )
+          )
+        )
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(ADHDLearningTracker));
+  </script>
 </body>
+
 </html>
